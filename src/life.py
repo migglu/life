@@ -57,11 +57,7 @@ class Life(object):
 
 				curr_cell = self.buffer_area.get(cell_num_x, cell_num_y)
 
-				if neighbours == 3 and curr_cell.is_dead():
-					curr_cell.flip_state()
-				elif neighbours < 2 and curr_cell.is_alive():
-					curr_cell.flip_state()
-				elif neighbours > 3 and curr_cell.is_alive():
+				if ( neighbours == 3 and curr_cell.is_dead() ) or ( curr_cell.is_alive() and ( neighbours < 2 or neighbours > 3 ) ):
 					curr_cell.flip_state()
 
 		Life.copy_cells(self.buffer_area, self.area)
