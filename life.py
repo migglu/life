@@ -1,59 +1,8 @@
-import os
-import sys
+from states import STATES, DRAW_AS
+from cell import Cell
+from twodarray import TwoDArray
 from time import sleep
 import random
-
-
-rows, cols = os.popen('stty size', 'r').read().split()
-rows = int(rows)-1 # cursor on new line
-cols = int(cols) / 2
-
-
-def enum(**enums):
-	return type('Enum', (), enums)
-
-STATES = enum(ALIVE=1, DEAD=0)
-DRAW_AS = enum(ALIVE='#', DEAD='-')
-
-class Cell(object):
-
-	def __init__(self):
-		super(Cell, self).__init__()
-		self.state = STATES.DEAD
-
-	def change_state(self, new_state):
-		self.state = new_state
-
-	def flip_state(self):
-		if self.state == STATES.ALIVE:
-			self.state = STATES.DEAD
-		else:
-			self.state = STATES.ALIVE
-
-class TwoDArray(object):
-
-	def __init__(self, width, height):
-		self.width = width
-		self.height = height
-		self.array = []
-		for f in range(width*height):
-			self.array.append(None)
-
-	def __iter__(self):
-		return iter(self.array)
-
-	def valid_indexes(self, x, y):
-		return not( x < 0 or x >= self.width or y < 0 or y >= self.height )
-
-	def get(self, x, y):
-		if not self.valid_indexes(x, y):
-			raise IndexError('Index out of bounds : (' + str(x) + ', ' + str(y) + ')')
-		return self.array[x + self.width*y]
-
-	def set(self, x, y, value):
-		if not self.valid_indexes(x, y):
-			raise IndexError('Index out of bounds : (' + str(x) + ', ' + str(y) + ')')
-		self.array[x + self.width*y] = value
 
 class Life(object):
 
@@ -66,9 +15,6 @@ class Life(object):
 			for y in range(self.area.height):
 				self.area.set(x, y, Cell())
 				self.buffer_area.set(x, y, Cell())
-		# for f in range(width*height):
-		# 	self.area.array.append(Cell())
-		# 	self.buffer_area.array.append(Cell())
 
 	@staticmethod
 	def copy_cells(from_, to):
@@ -82,10 +28,7 @@ class Life(object):
 	def __str__(self):
 		result = []
 		for cell in self.area:
-			if cell.state == STATES.ALIVE:
-				result.append(DRAW_AS.ALIVE)
-			else:
-				result.append(DRAW_AS.DEAD)
+			result.append(str(cell))
 			result.append(' ')
 		return ''.join(result)
 
@@ -139,11 +82,3 @@ class Life(object):
 			#sys.exit(0)
 
 			sleep(0.3)
-
-life = Life(rows, cols)
-life.randomize()
-
-try:
-	life.play()
-except KeyboardInterrupt, e:
-	pass
