@@ -1,4 +1,3 @@
-from states import STATES, DRAW_AS
 from cell import Cell
 from twodarray import TwoDArray
 from time import sleep
@@ -17,10 +16,10 @@ class Life(object):
 				self.buffer_area.set(x, y, Cell())
 
 	@staticmethod
-	def copy_cells(from_, to):
+	def copy_cells(from_, to_):
 		for x in range(from_.width):
 			for y in range(from_.height):
-				to.get(x, y).state = from_.get(x, y).state
+				to_.get(x, y).set_state(from_.get(x, y).get_state())
 
 	def __repr__(self):
 		return self.__str__(self);
@@ -40,7 +39,9 @@ class Life(object):
 					continue
 
 				try:
-					neighbours += self.area.get(x + offset_x, y + offset_y).state
+					current_cell = self.area.get(x + offset_x, y + offset_y)
+					if current_cell.is_alive():
+						neighbours += 1
 				except IndexError, e:
 					pass
 
@@ -56,21 +57,21 @@ class Life(object):
 
 				curr_cell = self.buffer_area.get(cell_num_x, cell_num_y)
 
-				if neighbours == 3 and curr_cell.state == STATES.DEAD:
-					curr_cell.state = STATES.ALIVE
-				elif neighbours < 2 and curr_cell.state == STATES.ALIVE:
-					curr_cell.state = STATES.DEAD
-				elif neighbours > 3 and curr_cell.state == STATES.ALIVE:
-					curr_cell.state = STATES.DEAD
+				if neighbours == 3 and curr_cell.is_dead():
+					curr_cell.flip_state()
+				elif neighbours < 2 and curr_cell.is_alive():
+					curr_cell.flip_state()
+				elif neighbours > 3 and curr_cell.is_alive():
+					curr_cell.flip_state()
 
 		Life.copy_cells(self.buffer_area, self.area)
 
 	def randomize(self):
-		for f in self.area:
+		for cell in self.area:
 			if random.random() < 0.2:
-				f.state = STATES.ALIVE
+				cell.set_alive()
 			else:
-				f.state = STATES.DEAD
+				cell.set_dead()
 
 	def play(self):
 		while 1:

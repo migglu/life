@@ -17,8 +17,23 @@ class Cell(object):
 			result.append(DRAW_AS.DEAD)
 		return ''.join(result)
 
-	def change_state(self, new_state):
+	def set_alive(self):
+		self.state = STATES.ALIVE
+
+	def set_dead(self):
+		self.state = STATES.DEAD
+
+	def is_alive(self):
+		return self.state == STATES.ALIVE
+
+	def is_dead(self):
+		return not self.is_alive()
+
+	def set_state(self, new_state):
 		self.state = new_state
+
+	def get_state(self):
+		return self.state
 
 	def flip_state(self):
 		if self.state == STATES.ALIVE:
