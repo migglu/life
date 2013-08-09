@@ -1,9 +1,12 @@
 import os
+from terminal import getTerminalSize
 
 class Console(object):
 
 	def __init__(self):
-		self.rows, self.cols = os.popen('stty size', 'r').read().split()
+		self.cols, self.rows = getTerminalSize()
+		print "rows %i" % self.rows
+		print "cols %i" % self.cols
 		self.rows = int(self.rows)
 		self.cols = int(self.cols)
 
