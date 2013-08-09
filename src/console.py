@@ -5,8 +5,6 @@ class Console(object):
 
 	def __init__(self):
 		self.cols, self.rows = getTerminalSize()
-		print "rows %i" % self.rows
-		print "cols %i" % self.cols
 		self.rows = int(self.rows)
 		self.cols = int(self.cols)
 
