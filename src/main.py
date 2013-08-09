@@ -6,7 +6,7 @@ def main():
 	life = Life(console.get_rows()-1, console.get_cols()/2)
 	life.randomize()
 	try:
-		life.play()
+		life.play_forever()
 	except KeyboardInterrupt:
 		pass
 

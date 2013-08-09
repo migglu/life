@@ -1,6 +1,7 @@
 from cell import Cell
 from twodarray import TwoDArray
 from time import sleep
+from configparser import config
 import random
 
 class Life(object):
@@ -28,7 +29,7 @@ class Life(object):
 		result = []
 		for cell in self.area:
 			result.append(str(cell))
-			result.append(' ')
+			result.append(' ') # TODO: not here...
 		return ''.join(result)
 
 	def get_alive_neighbours(self, area, x, y):
@@ -64,12 +65,12 @@ class Life(object):
 
 	def randomize(self):
 		for cell in self.area:
-			if random.random() < 0.2:
+			if random.random() < float(config.random_alive_chance):
 				cell.set_alive()
 			else:
 				cell.set_dead()
 
-	def play(self):
+	def play_forever(self):
 		while 1:
 			print
 			print self
@@ -78,4 +79,4 @@ class Life(object):
 			#for debugging only, comment otherwise
 			#sys.exit(0)
 
-			sleep(0.3)
+			sleep(float(config.evolve_interval))

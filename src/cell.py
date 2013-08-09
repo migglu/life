@@ -1,4 +1,5 @@
-from states import STATES, DRAW_AS
+from states import STATES
+from configparser import config
 
 class Cell(object):
 
@@ -12,9 +13,9 @@ class Cell(object):
 	def __str__(self):
 		result = []
 		if self.state == STATES.ALIVE:
-			result.append(DRAW_AS.ALIVE)
+			result.append(config.alive_cell)
 		else:
-			result.append(DRAW_AS.DEAD)
+			result.append(config.dead_cell)
 		return ''.join(result)
 
 	def set_alive(self):
